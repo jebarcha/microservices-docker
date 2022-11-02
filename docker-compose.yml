@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  
+  catalogdb:
+    image: mongo
+
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: Services/Catalog/Catalog.Api/Dockerfile
+
+  orderdb:
+    image: mcr.microsoft.com/mssql/server
+
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.Api/Dockerfile
+
+volumes:
+  mongo_data:
+

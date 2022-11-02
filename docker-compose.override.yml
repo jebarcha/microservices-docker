@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+
+
+  catalogdb:
+    container_name: "catalogdb"
+    ports:
+     - "27017:27017" 
+    volumes:
+     - "mongo_data:/data/db"
+  catalog.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+  orderdb:
+    container_name: "orderdb"
+    environment:
+      ACCEPT_EULA : Y
+      MSSQL_SA_PASSWORD: Impr0v1ng!
+    ports:
+      - 1433:1433   
+  ordering.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
