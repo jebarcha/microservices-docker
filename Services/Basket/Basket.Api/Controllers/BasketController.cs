@@ -28,5 +28,24 @@ public class BasketController : ControllerBase
         return Ok(basket ?? new ShoppingCart(userName));
     }
 
+    [HttpPost]
+    public async Task<ActionResult<ShoppingCart>> UpdateBasket([FromBody] ShoppingCart shoppingCart)
+    {
+        // checar existencias
+        foreach (var item in shoppingCart.shoppingCartItems)
+        {
+            var existance =  existanceService.CheckExistance(new CheckExistanceRequest { Id = item.ProductId });
+            if (existance.Existance < item.Quantity)
+            {
+                throw new Exception($"No existance of {item.ProductId}-{item.ProductName}");
+            }
+        }
+
+
+        await basketRepository.UpdateBasket(shoppingCart);
+
+        return Ok(shoppingCart);
+    }
+
 
 }
