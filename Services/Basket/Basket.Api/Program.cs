@@ -1,3 +1,4 @@
+using Basket.Api.Repositories;
 using Existance.Grpc.Protos;
 
 namespace Basket.Api
@@ -17,7 +18,12 @@ namespace Basket.Api
 
 
             // configure Redis
-            builder.Services.AddStackExchangeRedisCache()
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = builder.Configuration.GetValue<string>("CacheSettings:ConnectionString");
+            });
+
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
             // configure our gRPC service
             builder.Services.AddGrpcClient<ExistanceService.ExistanceServiceClient>
